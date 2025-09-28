@@ -1,0 +1,17 @@
+{
+  "spotify": {
+    "client_id": "YOUR_SPOTIFY_CLIENT_ID",
+    "client_secret": "YOUR_SPOTIFY_CLIENT_SECRET",
+    "redirect_uri": "https://localhost:8888/callback",
+    "playlists": [
+      "Liquid Drum&Bass"
+    ]
+  },
+  "tidal": {
+    "username": "your@email.com",
+    "password": "yourpassword"
+  },
+  "logging": {
+    "file": "migration.log"
+  }
+}
