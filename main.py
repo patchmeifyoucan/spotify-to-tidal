@@ -13,8 +13,6 @@ from rapidfuzz import fuzz
 from spotipy.oauth2 import SpotifyOAuth
 from tqdm import tqdm
 
-TIDAL_SESSION_FILE = "tidal_session.pkl"
-
 
 def configure_logging(filename=None, level="INFO"):
     fmt = "<green>{time:YYYY-MM-DD HH:mm:ss}</green> {elapsed} <level>{level: <4}</level> "
@@ -73,9 +71,9 @@ def spotify_session(cfg):
     return spotipy.Spotify(auth_manager=auth)
 
 
-def tidal_session():
-    if os.path.exists(TIDAL_SESSION_FILE):
-        with open(TIDAL_SESSION_FILE, "rb") as f:
+def tidal_session(file):
+    if os.path.exists(file):
+        with open(file, "rb") as f:
             session = pickle.load(f)
         if session.check_login():
             logger.info("loaded saved tidal session")
@@ -93,7 +91,7 @@ def tidal_session():
     if not session.check_login():
         raise RuntimeError("failed to log in to tidal")
 
-    with open(TIDAL_SESSION_FILE, "wb") as f:
+    with open(file, "wb") as f:
         pickle.dump(session, f)  # noqa
     logger.info("tidal session saved")
     return session
@@ -218,6 +216,7 @@ def add_tracks(playlist, tracks):
 
 
 def main():
+    tidal_file = "tidal_session.pkl"
     config_file = "config.json"
     state_file = "state.json"
 
@@ -227,7 +226,7 @@ def main():
     state = load_json(state_file) or {}
 
     sp = spotify_session(conf["spotify"])
-    tidal = tidal_session()
+    tidal = tidal_session(tidal_file)
 
     prefix = conf["prefix"]
     auto = conf["auto"]
