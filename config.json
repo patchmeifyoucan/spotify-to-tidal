@@ -3,15 +3,12 @@
     "client_id": "e727b713902f442980d4a4b26d940c01",
     "client_secret": "c411f45422ed4e9fa4346270e504473f",
     "redirect_uri": "http://127.0.0.1:8888/callback",
-    "playlists": [
-      "Trap"
-    ]
+    "playlists": []
   },
   "tidal": {
-    "username": "your@email.com",
-    "password": "yourpassword"
+    "username": null,
+    "password": null
   },
-  "logging": {
-    "file": "migration.log"
-  }
+  "prefix": "",
+  "auto": true
 }
