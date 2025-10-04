@@ -7,6 +7,7 @@ Install it, then from root, run:
 ```
 uv venv --python=3.12
 uv sync
+source .venv/bin/activate
 ```
 
 Then, edit credentials and playlists in [config.json](config.json).
