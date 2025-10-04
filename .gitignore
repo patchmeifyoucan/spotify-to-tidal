@@ -2,5 +2,6 @@
 /.venv
 /.cache
 /config.json
+/state.json
 *.pkl
 *.log

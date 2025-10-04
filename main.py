@@ -1,17 +1,17 @@
 import json
-import re
-
-import numpy as np
-from rapidfuzz import fuzz
 import os
 import pickle
+import re
 import sys
 import time
 
+import numpy as np
 import spotipy
 import tidalapi
 from loguru import logger
+from rapidfuzz import fuzz
 from spotipy.oauth2 import SpotifyOAuth
+from tqdm import tqdm
 
 TIDAL_SESSION_FILE = "tidal_session.pkl"
 
@@ -30,9 +30,17 @@ def configure_logging(filename=None, level="INFO"):
         logger.add(filename, **args)
 
 
-def load_config(path):
+def load_json(path):
+    if not os.path.exists(path):
+        return None
+
     with open(path) as f:
         return json.load(f)
+
+
+def write_json(file, data):
+    with open(file, "w") as f:
+        f.write(json.dumps(data, indent=2))
 
 
 def clean(text: str) -> str:
@@ -112,11 +120,13 @@ def fetch_spotify_playlist_tracks(sp, playlist_id):
                 continue
             name = track.get("name")
 
-            # TODO define how to search for artists to not confuse search
             artists = track["artists"][0]["name"]
-
             iscr = track["external_ids"]["isrc"]
-            tracks.append({"name": name, "artists": artists, "isrc": iscr})
+            query = clean(f"{artists} {name}")
+
+            tracks.append(
+                {"query": query, "name": name, "artists": artists, "isrc": iscr}
+            )
 
         results = sp.next(results) if results["next"] else None
 
@@ -139,15 +149,14 @@ def ensure_tidal_playlist(session, prefix, name, description="Imported from Spot
 
 def search_tidal_by_name_and_artist(session, track, auto):
     name = track["name"]
-    artists = track["artists"]
     isrc = track["isrc"]
+    query = track["query"]
 
-    query = clean(f"{artists} {name}")
     results = session.search(query, models=[tidalapi.Track], limit=100)
     tracks = results["tracks"]
 
     if not tracks:
-        logger.info(f"nothing found for query: '{query}'")
+        logger.debug(f"nothing found for query: '{query}'")
         return None
 
     for t in tracks:
@@ -167,7 +176,7 @@ def search_tidal_by_name_and_artist(session, track, auto):
         track = tracks[0]
         track_name = track.name
         track_artist = track.artists[0].name
-        logger.info(
+        logger.debug(
             f"auto-matched '{query}' with '{track_artist} - {track_name}' (score: {fuzzy_scores[0]})"
         )
         return track
@@ -201,14 +210,21 @@ def search_tidal_by_name_and_artist(session, track, auto):
 
 
 def add_tracks(playlist, tracks):
+    if not tracks:
+        return
+
     track_ids = [t.id for t in tracks]
     playlist.add(track_ids)
 
 
 def main():
+    config_file = "config.json"
+    state_file = "state.json"
+
     configure_logging("sync.log")
 
-    conf = load_config("config.json")
+    conf = load_json(config_file)
+    state = load_json(state_file) or {}
 
     sp = spotify_session(conf["spotify"])
     tidal = tidal_session()
@@ -228,48 +244,50 @@ def main():
             logger.info(f"spotify playlist not found: {playlist_name}")
             continue
 
+        if playlist_name not in state:
+            state[playlist_name] = {"idx": 0, "missing": []}
+
         logger.info(f"fetch spotify playlist: {playlist_name}")
         tracks = fetch_spotify_playlist_tracks(sp, playlist_id)
 
         logger.info(f"check tidal playlist: {playlist_name}")
         tidal_playlist = ensure_tidal_playlist(tidal, prefix, playlist_name)
 
-        logger.info(f"search tidal tracks...")
-
-        tidal_tracks = []
-
         done = 0
 
-        for track in tracks:
+        batch = []
+        missing = []
+
+        start_idx = state[playlist_name]["idx"]
+        tracks = tracks[start_idx:]
+
+        for track in tqdm(
+            tracks, leave=False, file=sys.stdout, desc=f"{playlist_name} sync"
+        ):
             found = search_tidal_by_name_and_artist(tidal, track, auto)
 
             if found is not None:
-                tidal_tracks.append(found)
+                done += 1
+                batch.append(found)
+            else:
+                missing.append(track)
 
-            if len(tidal_tracks) == batch_size:
-                done += len(tidal_tracks)
-                add_tracks(tidal_playlist, tidal_tracks)
-                tidal_tracks = []
-                logger.info(f"{done}/{len(tracks)} done")
+            if len(batch) == batch_size:
+                add_tracks(tidal_playlist, batch)
+                batch.clear()
 
-        done += len(tidal_tracks)
-        add_tracks(tidal_playlist, tidal_tracks)
-        logger.info(f"{done}/{len(tracks)} done")
+        add_tracks(tidal_playlist, batch)
 
-        logger.info(f"search tidal tracks done")
+        state[playlist_name]["idx"] += len(tracks)
+        state[playlist_name]["missing"].extend(missing)
 
-        if not tidal_tracks:
-            continue
-
-        logger.info(f"add tidal tracks...")
-        add_tracks(tidal_playlist, tidal_tracks)
-        logger.info(f"add tidal tracks done")
+        write_json(state_file, state)
 
         end = time.time()
         duration = round(end - start, 2)
 
         logger.info(
-            f"added {done}/{len(tracks)} tracks to '{playlist_name}' in {duration}s"
+            f"added {done}/{len(tracks)} ({len(missing)} missing) tracks to '{playlist_name}' in {duration}s"
         )
 
 

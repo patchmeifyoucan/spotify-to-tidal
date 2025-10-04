@@ -420,6 +420,7 @@ dependencies = [
     { name = "rapidfuzz" },
     { name = "scikit-learn" },
     { name = "spotipy" },
+    { name = "tdqm" },
     { name = "tidalapi" },
 ]
 
@@ -431,6 +432,7 @@ requires-dist = [
     { name = "rapidfuzz", specifier = ">=3.14.1" },
     { name = "scikit-learn", specifier = ">=1.7.2" },
     { name = "spotipy", specifier = ">=2.25.1" },
+    { name = "tdqm", specifier = ">=0.0.1" },
     { name = "tidalapi", specifier = ">=0.8.6" },
 ]
 
@@ -447,6 +449,15 @@ sdist = { url = "https://files.pythonhosted.org/packages/18/22/d900e55cfdd489ecd
 wheels = [
     { url = "https://files.pythonhosted.org/packages/bd/3b/dde90e39c456f0d72397afd49d433f95c6a2fdbdcd829bcfc38cdbf6949a/spotipy-2.25.1-py3-none-any.whl", hash = "sha256:18f47d9a0594ced8001b3baa5a4160ea6dcf570abbdad371971f475a81892844", size = 31331, upload-time = "2025-02-27T07:32:13.086Z" },
 ]
+
+[[package]]
+name = "tdqm"
+version = "0.0.1"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "tqdm" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/5a/38/58c9e22b95e98666fe29f35e217ab6126a03798dadf3f4f8f3e5f898510b/tdqm-0.0.1.tar.gz", hash = "sha256:f050004a76b1d22f70b78209b48781353c82440215b6ba7d22b1f499b05a0101", size = 1388, upload-time = "2020-08-19T20:16:22.191Z" }
 
 [[package]]
 name = "threadpoolctl"
@@ -472,6 +483,18 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/b9/f8/3adec91da02ff3379ee246a7dac1b2603cd64d0f291c8a67f544ac62455e/tidalapi-0.8.6.tar.gz", hash = "sha256:23315c717d56f08436638d217d73e710ff5ce414292b0668ae8cbfeefab92323", size = 56269, upload-time = "2025-08-19T16:59:15.367Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/fb/03/b0702b54f6eb34e8016ef0e6cde1bfde2f72a7bacd95dec196f033a7f784/tidalapi-0.8.6-py3-none-any.whl", hash = "sha256:a55f54ff4110398cd3a565b6cfc8bcbf8e104442e06db0eab8372abcd653a3d6", size = 62893, upload-time = "2025-08-19T16:59:13.82Z" },
+]
+
+[[package]]
+name = "tqdm"
+version = "4.67.1"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "colorama", marker = "sys_platform == 'win32'" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/a8/4b/29b4ef32e036bb34e4ab51796dd745cdba7ed47ad142a9f4a1eb8e0c744d/tqdm-4.67.1.tar.gz", hash = "sha256:f8aef9c52c08c13a65f30ea34f4e5aac3fd1a34959879d7e59e63027286627f2", size = 169737, upload-time = "2024-11-24T20:12:22.481Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/d0/30/dc54f88dd4a2b5dc8a0279bdd7270e735851848b762aeb1c1184ed1f6b14/tqdm-4.67.1-py3-none-any.whl", hash = "sha256:26445eca388f82e72884e0d580d5464cd801a3ea01e63e5601bdff9ba6a48de2", size = 78540, upload-time = "2024-11-24T20:12:19.698Z" },
 ]
 
 [[package]]

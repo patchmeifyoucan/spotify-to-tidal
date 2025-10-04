@@ -11,5 +11,6 @@ dependencies = [
     "rapidfuzz>=3.14.1",
     "scikit-learn>=1.7.2",
     "spotipy>=2.25.1",
+    "tdqm>=0.0.1",
     "tidalapi>=0.8.6",
 ]
