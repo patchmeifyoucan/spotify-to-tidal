@@ -12,5 +12,5 @@ dependencies = [
     "scikit-learn>=1.7.2",
     "spotipy>=2.25.1",
     "tdqm>=0.0.1",
-    "tidalapi>=0.8.6",
+    "tidalapi>=0.8.8",
 ]

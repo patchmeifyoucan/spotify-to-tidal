@@ -222,6 +222,12 @@ wheels = [
 ]
 
 [[package]]
+name = "pyaes"
+version = "1.6.1"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/44/66/2c17bae31c906613795711fc78045c285048168919ace2220daa372c7d72/pyaes-1.6.1.tar.gz", hash = "sha256:02c1b1405c38d3c370b085fb952dd8bea3fadcee6411ad99f312cc129c536d8f", size = 28536, upload-time = "2017-09-20T21:17:54.23Z" }
+
+[[package]]
 name = "python-dateutil"
 version = "2.9.0.post0"
 source = { registry = "https://pypi.org/simple" }
@@ -433,7 +439,7 @@ requires-dist = [
     { name = "scikit-learn", specifier = ">=1.7.2" },
     { name = "spotipy", specifier = ">=2.25.1" },
     { name = "tdqm", specifier = ">=0.0.1" },
-    { name = "tidalapi", specifier = ">=0.8.6" },
+    { name = "tidalapi", specifier = ">=0.8.8" },
 ]
 
 [[package]]
@@ -470,19 +476,20 @@ wheels = [
 
 [[package]]
 name = "tidalapi"
-version = "0.8.6"
+version = "0.8.8"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "isodate" },
     { name = "mpegdash" },
+    { name = "pyaes" },
     { name = "python-dateutil" },
     { name = "ratelimit" },
     { name = "requests" },
     { name = "typing-extensions" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/b9/f8/3adec91da02ff3379ee246a7dac1b2603cd64d0f291c8a67f544ac62455e/tidalapi-0.8.6.tar.gz", hash = "sha256:23315c717d56f08436638d217d73e710ff5ce414292b0668ae8cbfeefab92323", size = 56269, upload-time = "2025-08-19T16:59:15.367Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/02/86/ee5061c05d9488d5c6bdf5eacbe9d59e03d278e744dab9981de08fa6c490/tidalapi-0.8.8.tar.gz", hash = "sha256:f378e5f8c56c0a0e59ac75880f50b986132e2e0a992da061646b5abe97704c75", size = 56515, upload-time = "2025-10-15T20:53:55.006Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/fb/03/b0702b54f6eb34e8016ef0e6cde1bfde2f72a7bacd95dec196f033a7f784/tidalapi-0.8.6-py3-none-any.whl", hash = "sha256:a55f54ff4110398cd3a565b6cfc8bcbf8e104442e06db0eab8372abcd653a3d6", size = 62893, upload-time = "2025-08-19T16:59:13.82Z" },
+    { url = "https://files.pythonhosted.org/packages/d0/c0/27fafcbaf426954d405ce426947312bf732f3c4ae9c758078a2a157208dc/tidalapi-0.8.8-py3-none-any.whl", hash = "sha256:70e5ccebf608ad3fb9e17bde5fe36783322f993e1d4efb25a0ae970d898669fc", size = 63076, upload-time = "2025-10-15T20:53:53.587Z" },
 ]
 
 [[package]]
